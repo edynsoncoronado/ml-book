@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  ml-qdrant-books:
+    image: qdrant/qdrant:v1.12.1
+    container_name: ml-qdrant-books
+    ports:
+      - "6334:6333"
+    volumes:
+      - qdrant-data:/qdrant/storage
+
+  ml-env-books:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    working_dir: /app
+    volumes:
+      - ${PWD}/app:/app
+    container_name: ml-env-books
+    depends_on:
+      - ml-qdrant-books
+    tty: true
+
+volumes:
+  qdrant-data:
